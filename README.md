@@ -1,6 +1,6 @@
-# goSecretManager (gSM)
+# kryptos
 
-goSecretManager (gSM) is a command-line tool for managing encrypted secrets stored in Redis. It provides functionality to delete, list, and get secrets securely. This tool is designed to help you manage sensitive information within your applications.
+A command-line tool for managing encrypted secrets stored in Redis. It provides functionality to delete, list, and get secrets securely. This tool is designed to help you manage sensitive information within your applications.
 
 ## Features
 
