@@ -9,12 +9,4 @@ A command-line tool for managing encrypted secrets stored in Redis. It provides 
 - **Delete Secrets**: Easily delete secrets from Redis.
 - **List Secrets**: View a list of all available secrets.
 - **Get Secrets**: Retrieve a specific secret by its key.
-
-## Installation
-
-To install gSM, follow these steps:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/chxmxii/gSM/
+- **Put Secrets**: Add a new secret to Redis.
