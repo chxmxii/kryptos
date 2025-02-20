@@ -31,6 +31,16 @@ func SaveKey(key Key, path string) error {
 		return errors.New("key is empty")
 	}
 
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("failed to get home directory: %w", err)
+	}
+
+	defaultPath := filepath.Join(home + "/.kryptos/key")
+	if path == "" {
+		path = defaultPath
+	}
+
 	dir := filepath.Dir(path)
 	if err := os.MkdirAll(dir, 0700); err != nil {
 		return fmt.Errorf("failed to create directory: %w", err)
@@ -40,11 +50,12 @@ func SaveKey(key Key, path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create key file: %w", err)
 	}
-	defer file.Close()
 
 	if _, err := file.Write(key); err != nil {
 		return fmt.Errorf("failed to write key to file: %w", err)
 	}
+
+	defer file.Close()
 
 	log.Printf("Key saved to %s\n", path)
 	return nil
@@ -61,14 +72,6 @@ func LoadKey(path string) (Key, error) {
 	}
 
 	return key, nil
-}
-
-func HomeDir() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("Failed to get home directory: %v", err)
-	}
-	return home
 }
 
 func (k Key) KeyToString() string {
