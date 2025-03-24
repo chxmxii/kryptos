@@ -22,7 +22,6 @@ func init() {
 	// Add flags to the command
 	putCmd.Flags().StringP("key", "k", "", "Path to the encryption key file")
 	putCmd.Flags().IntP("index", "i", 0, "Redis database index")
-	putCmd.MarkFlagRequired("key")
 }
 
 func Put(cmd *cobra.Command, args []string) error {
