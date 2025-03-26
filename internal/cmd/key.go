@@ -17,6 +17,7 @@ func init() {
 	rootCmd.AddCommand(genCmd)
 
 	genCmd.Flags().StringP("output", "o", "", "Path to the output file")
+	genCmd.Flags().IntP("size", "s", 32, "Size of the key")
 }
 
 func Generate(cmd *cobra.Command, args []string) {

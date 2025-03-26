@@ -62,6 +62,16 @@ func SaveKey(key Key, path string) error {
 }
 
 func LoadKey(path string) (Key, error) {
+	// default path
+	if path == "" {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return nil, fmt.Errorf("failed to get home directory: %w", err)
+		}
+		path = filepath.Join(home + "/.kryptos/key")
+	}
+
+	// read key file
 	key, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read key file: %w", err)

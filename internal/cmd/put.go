@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"os"
 
+	"strings"
+
 	"github.com/chxmxii/kryptos/internal/crypto"
 	"github.com/chxmxii/kryptos/internal/redis"
 	"github.com/spf13/cobra"
 )
 
 var putCmd = &cobra.Command{
-	Use:   "put",
-	Short: "Put a key-value pair into Redis",
-	Args:  cobra.ExactArgs(2),
-	RunE:  Put,
+	Use:     "put",
+	Example: "kryptos put role:admin",
+	Short:   "set a key-value pair into database",
+	Args:    cobra.ExactArgs(1),
+	RunE:    Put,
 }
 
 func init() {
@@ -26,8 +29,16 @@ func init() {
 
 func Put(cmd *cobra.Command, args []string) error {
 
-	k := args[0]
-	v := args[1]
+	kv := args[0]
+
+	// Split the key-value pair
+	kvSplit := strings.Split(kv, ":")
+	if len(kvSplit) != 2 {
+		return fmt.Errorf("invalid key-value pair: %s", kv)
+	}
+
+	k := kvSplit[0]
+	v := kvSplit[1]
 
 	keyPath := cmd.Flag("key").Value.String()
 	dbIndex, _ := cmd.Flags().GetInt("index")
