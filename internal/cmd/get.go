@@ -48,12 +48,7 @@ func Get(cmd *cobra.Command, args []string) error {
 	defer redisClient.Close()
 
 	// start a new context
-	// to avoid using the default context
-	// which may be cancelled or timed out
-	ctx := cmd.Context()
-	if ctx == nil {
-		ctx = context.Background()
-	}
+	ctx := context.Background()
 
 	// Check if the key exists in the database
 	exists, err := redisClient.Client.Exists(ctx, k).Result()
@@ -83,7 +78,6 @@ func Get(cmd *cobra.Command, args []string) error {
 
 	// print the decrypted value
 	fmt.Printf("$> '%s'\n", decryptedValue)
-	// return nil to indicate success
 
 	return nil
 }

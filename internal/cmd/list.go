@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -41,10 +42,7 @@ func List(cmd *cobra.Command, args []string) error {
 	defer redisClient.Close()
 
 	// start a new context
-	ctx := cmd.Context()
-	if ctx == nil {
-		ctx = context.Background()
-	}
+	ctx := context.Background()
 
 	// List all keys in the database
 	keys, err := redisClient.Client.Keys(ctx, "*").Result()
