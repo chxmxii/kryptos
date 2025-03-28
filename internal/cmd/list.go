@@ -43,7 +43,7 @@ func List(cmd *cobra.Command, args []string) error {
 	// start a new context
 	ctx := cmd.Context()
 	if ctx == nil {
-		ctx = cmd.Context()
+		ctx = context.Background()
 	}
 
 	// List all keys in the database

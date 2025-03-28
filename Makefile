@@ -1,5 +1,5 @@
 # Variables
-BINARY_NAME := challengefile
+BINARY_NAME := kryptos
 BINARY_PATH := /usr/bin/$(BINARY_NAME)
 BINARY_TEST_PATH := ./binary/$(BINARY_NAME)
 
