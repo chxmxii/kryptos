@@ -46,7 +46,7 @@ func Put(cmd *cobra.Command, args []string) error {
 	redisAddr := os.Getenv("REDIS_ADDR")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
 
-	encryptionKey, err := crypto.LoadKey(keyPath)
+	key, err := crypto.LoadKey(keyPath)
 	if err != nil {
 		return fmt.Errorf("failed to load encryption key: %w", err)
 	}
@@ -58,12 +58,12 @@ func Put(cmd *cobra.Command, args []string) error {
 	defer redisClient.Close()
 
 	// Encrypt the value
-	encryptedValue, err := crypto.Encrypt([]byte(v), encryptionKey)
+	value, err := crypto.Encrypt([]byte(v), key)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt value: %w", err)
 	}
 
-	if err := redisClient.Client.Set(redisClient.Client.Context(), k, encryptedValue, 0).Err(); err != nil {
+	if err := redisClient.Client.Set(redisClient.Client.Context(), k, value, 0).Err(); err != nil {
 		return fmt.Errorf("failed to set key-value pair in Redis: %w", err)
 	}
 

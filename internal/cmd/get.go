@@ -36,7 +36,7 @@ func Get(cmd *cobra.Command, args []string) error {
 	redisAddr := os.Getenv("REDIS_ADDR")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
 
-	decryptionKey, err := crypto.LoadKey(keyPath)
+	key, err := crypto.LoadKey(keyPath)
 	if err != nil {
 		return fmt.Errorf("failed to load decryption key: %w", err)
 	}
@@ -66,18 +66,18 @@ func Get(cmd *cobra.Command, args []string) error {
 	}
 
 	// Decrypt the value
-	decryptedValue, err := crypto.Decrypt([]byte(v), decryptionKey)
+	value, err := crypto.Decrypt([]byte(v), key)
 	if err != nil {
 		return fmt.Errorf("failed to decrypt value: %w", err)
 	}
 
 	// Check if the decrypted value is empty
-	if len(decryptedValue) == 0 {
+	if len(value) == 0 {
 		return fmt.Errorf("decrypted value is empty, something went wrong")
 	}
 
 	// print the decrypted value
-	fmt.Printf("$> '%s'\n", decryptedValue)
+	fmt.Printf("$> '%s'\n", value)
 
 	return nil
 }
