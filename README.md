@@ -21,7 +21,7 @@ To install `kryptos`, use the following steps:
 
 `kryptos` provides several commands to manage encrypted secrets in Redis. Below are the available commands:
 
-### List Secrets
+### List keys
 To list all stored secrets:
 ```bash
 kryptos list
@@ -39,8 +39,8 @@ To delete a key:
 kryptos del <key>
 ```
 
-### Add a Secret
-To add a new secret:
+### Add a new key
+To add a new key:
 ```bash
 kryptos put <key>:<value>  -i <dbidx> -k <encryption_key>
 ```
