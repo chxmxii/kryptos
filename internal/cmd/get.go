@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -35,9 +36,9 @@ func Get(cmd *cobra.Command, args []string) error {
 	redisAddr := os.Getenv("REDIS_ADDR")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
 
-	encryptionKey, err := crypto.LoadKey(keyPath)
+	decryptionKey, err := crypto.LoadKey(keyPath)
 	if err != nil {
-		return fmt.Errorf("failed to load encryption key: %w", err)
+		return fmt.Errorf("failed to load decryption key: %w", err)
 	}
 
 	redisClient, err := redis.Connect(redisAddr, redisPassword, dbIndex)
@@ -45,19 +46,44 @@ func Get(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to connect to Redis: %w", err)
 	}
 	defer redisClient.Close()
-	ctx := cmd.
+
+	// start a new context
+	// to avoid using the default context
+	// which may be cancelled or timed out
+	ctx := cmd.Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	// Check if the key exists in the database
+	exists, err := redisClient.Client.Exists(ctx, k).Result()
+	if err != nil {
+		return fmt.Errorf("failed to check if key exists: %w", err)
+	}
+	if exists == 0 {
+		return fmt.Errorf("key %s does not exist", k)
+	}
+
 	// Get the value from the database
-	if err := redisClient.Client.Get(k); err != nil {
-		return fmt.Errorf("failed to get value from database: %w", err)
+	v, err := redisClient.Client.Get(ctx, k).Result()
+	if err != nil {
+		return fmt.Errorf("failed to get value: %w", err)
 	}
 
 	// Decrypt the value
-	decryptedValue, err := crypto.Decrypt(encryptionKey, v)
+	decryptedValue, err := crypto.Decrypt([]byte(v), decryptionKey)
 	if err != nil {
 		return fmt.Errorf("failed to decrypt value: %w", err)
 	}
 
-	fmt.Println(decryptedValue)
+	// Check if the decrypted value is empty
+	if len(decryptedValue) == 0 {
+		return fmt.Errorf("decrypted value is empty, something went wrong")
+	}
+
+	// print the decrypted value
+	fmt.Printf("$> '%s'\n", decryptedValue)
+	// return nil to indicate success
 
 	return nil
 }
