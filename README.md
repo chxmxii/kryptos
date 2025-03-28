@@ -1,6 +1,6 @@
 # kryptos
 
-A command-line tool for managing encrypted keys stored in Redis, written in Go. It provides functionality to delete, list, and get keys securely. This tool was made for learning purposes and 
+A command-line tool for managing encrypted keys stored in Redis, written in Go. It provides functionality to delete, list, and get keys securely. This tool was made for learning purposes.
 
 ## Installation
 
