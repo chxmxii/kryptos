@@ -8,12 +8,13 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:           "kryptos <command> --key <path/to/key> key1:value1",
-	Short:         "Kryptos is a simple key-value store",
+	Use:           "kryptos",
+	Short:         "Kryptos is a simple key-value store that encrypts values before storing them in Redis.",
 	SilenceUsage:  true,
 	SilenceErrors: true,
+	Version:       "0.0.1",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
+		cmd.Help() //nolint: errcheck
 	},
 }
 
