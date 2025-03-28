@@ -23,7 +23,17 @@ func init() {
 func Generate(cmd *cobra.Command, args []string) {
 	outputPath := cmd.Flag("output").Value.String()
 
-	key, err := crypto.GenerateKey(32)
+	size, err := cmd.Flags().GetInt("size")
+	if err != nil {
+		fmt.Printf("Failed to retrieve size flag: %v\n", err)
+		return
+	}
+
+	if size <= 0 {
+		size = 32 // Default size
+	}
+
+	key, err := crypto.GenerateKey(size)
 	if err != nil {
 		fmt.Printf("Failed to generate key: %v\n", err)
 		return
@@ -34,5 +44,5 @@ func Generate(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	fmt.Println("Key generated and saved successfully")
+	fmt.Printf("A new key with size %d has been generated and saved to %s\n", size, outputPath)
 }
